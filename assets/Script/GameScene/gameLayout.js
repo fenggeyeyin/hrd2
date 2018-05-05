@@ -30,7 +30,7 @@ cc.Class({
         }
     },
     reward:0,
-    pSet:null,//坐标矩阵集合
+    pieces:null,
     stars:null,
     mask:null,
     pNum: 0,
@@ -42,42 +42,25 @@ cc.Class({
         this.buildInitPosTable();
         this.buildCoordinateSet();//根据配置信息生成每个元素的坐标点集合
         this.init();
-        this.check();
         
     },
     init:function(){//初始化函数，生成star节点，添加监听事件
         var node=this.node;
         this.mask=[];
+        this.pieces=[];
         this.stars=[];
         for(var i=0;i<10;i++){
                 var ele=cc.instantiate(this.piece) 
                 var com=ele.getComponent('piece') 
                 com.setSpriteFrame(i > 6 ? 6: i) 
-                com.setPnum(i + 1) 
+                com.setPnum(i + 1)
+                this.pieces[i + 1] = ele
                 var offset = com.getOffSet()
-                ele.setPosition(this.initPos[i].x*128 + offset.x, this.initPos[i].y*128 + offset.y) 
+                ele.setPosition(this.initPos[i].x*128 + offset.x, this.initPos[i].y*128 + offset.y)
                 com.pos = cc.v2(this.initPos[i].x*128 + offset.x, this.initPos[i].y*128 + offset.y)
-                this.addPieceTouchEvents(ele) 
-                node.addChild(ele,0,"ele") 
+                node.addChild(ele,0,"ele")
         }
-
-        var pSet=this.pSet;
-        for(var i=0;i<this.Row;i++){
-            var arr1=[];
-            var marr=[];
-            for(var j=0;j<this.Col;j++){
-                var ele=cc.instantiate(this.star);
-                //ele.setPosition(pSet[i][j].x,pSet[i][j].y);
-                //node.addChild(ele,0,"ele");
-                //this.addTouchEvents(ele);
-                var com=ele.getComponent('Star');
-                com.pos=cc.v2(i,j);
-                arr1.push(ele);
-                marr.push(0);
-            }
-            this.mask.push(marr);
-            this.stars.push(arr1);
-        }
+        this.addPieceTouchEvents()
     },
     check:function(){
         if(this.checkConnected()){
@@ -180,33 +163,37 @@ cc.Class({
         }
         
     },
-    addPieceTouchEvents: function (node) {//添加触摸监听事件
+    findNodeByPos: function (x, y) {
+        var pNum = this.board[parseInt(x/128)][parseInt(y/128)]
+        return this.pieces[pNum]
+    },
+    addPieceTouchEvents: function () {//添加触摸监听事件
         var p1=null;
         var p2=null;
+        var selectNode=null;
         window.console.log("m"+this);
-        node.on('touchstart',function(event){//传回节点位置
-            node.select=true;
-            p1=node.getComponent('piece').pos;
+        this.node.on('touchstart',function(event){//传回节点位置
+            var x=event.getLocationX()
+            var y=event.getLocationY()
+            selectNode=this.findNodeByPos(x, y)
+            selectNode.select=true;
+            p1=selectNode.getComponent('piece').pos;
             window.console.log(p1);
         },this);
-        node.on('touchmove',function(event){
-            if(node.select){
-                var x=event.getLocationX();
-                var y=event.getLocationY();
-                node.setPosition(x,y);
-                //window.console.log(x+" "+y);
-            }
-        },this);
-        node.on('touchend',function(event){
-            node.select=false;
-            var x=event.getLocationX();
-            var y=event.getLocationY();
+        this.node.on('touchend',function(event){
+            selectNode.select=false;
+            var x=event.getLocationX()
+            var y=event.getLocationY()
             var m = this.calcPieceMove(p1, x, y)
-            if(this.canMove(node.getComponent('piece').getPnum(), m)){
-                this.movePiecePos(node, p1, m)
-                this.movePieceOnBoard(node.getComponent('piece').getPnum(), m)
-            } else
-                node.setPosition(p1.x, p1.y);
+            while(m.move > 0){
+                if(this.canMove(selectNode.getComponent('piece').getPnum(), m)){
+                    this.movePiecePos(selectNode, m)
+                    this.movePieceOnBoard(selectNode.getComponent('piece').getPnum(), m)
+                    return
+                }
+                m.move--
+            } 
+            node.setPosition(p1.x, p1.y)
         },this);  
     },
     calcPieceMove: function ( p1, x, y) {
@@ -217,7 +204,7 @@ cc.Class({
         
         if (Math.abs(y-p1.y) < Math.abs(x-p1.x)) {
            var distance = Math.abs(x-p1.x)
-           if (172 < distance && distance < 384) {
+           if (172 < distance) {
                move = 2;
            } else if  (0 < distance && distance <= 172){
                move = 1;
@@ -228,7 +215,7 @@ cc.Class({
             direct = 'left'
         } else {
             var distance = Math.abs(y-p1.y)
-            if (172 < distance && distance < 384) {
+            if (172 < distance) {
                 move = 2;
             } else if  (0 < distance && distance <= 172){
                 move = 1;
@@ -240,7 +227,8 @@ cc.Class({
         }
         return {direct: direct, move: move}
     },
-    movePiecePos: function (node, p1, m) {
+    movePiecePos: function (node, m) {
+        var p1 = node.getComponent('piece').pos
         var x = p1.x, y=p1.y
         if (m.direct == 'right')
             x = p1.x + m.move*128
@@ -250,7 +238,11 @@ cc.Class({
             y = p1.y + m.move*128
         if (m.direct == 'down')
             y = p1.y - m.move*128
-        node.setPosition(x,y);
+
+        var act=cc.moveTo(m.move*0.1,cc.v2(x, y));
+
+        node.runAction(act);
+        //node.setPosition(x,y);
         node.getComponent('piece').pos = cc.v2(x, y)
     },
     movePieceOnBoard: function (p_num, m) {
@@ -340,11 +332,11 @@ cc.Class({
         var t=this.stars[p1.x][p1.y];
         this.stars[p1.x][p1.y]=this.stars[p2.x][p2.y];
         this.stars[p2.x][p2.y]=t;
-        
-        
+
+
     },
     delAndDrop:function(){
-        
+
         this.deleteConnected();
         this.dropAndUpdata();
 
@@ -378,7 +370,7 @@ cc.Class({
                 }else{
                     index2=this.stars[i][j].getComponent('Star').sfIndex;
                 }
-                
+
                 if(index1!=index2){
                     end=j;
                     if(end-start>=3){
@@ -392,7 +384,7 @@ cc.Class({
                     if(start!=this.stars[i].length){
                         index1=this.stars[i][start].getComponent('Star').sfIndex;
                     }
-                    
+
                 }
             }
         }
@@ -414,7 +406,7 @@ cc.Class({
                 while(end<this.Row){
                     if(typeof(this.stars[end][j])=='undefined'){
                         if(end-begin>=3){
-                            while(begin!=end){ 
+                            while(begin!=end){
                                 if(this.mask[begin][j]!=1){
                                     this.mask[begin][j]=1;
                                     count++;
@@ -427,7 +419,7 @@ cc.Class({
                     index2=this.stars[end][j].getComponent('Star').sfIndex;
                     if(index1!=index2){
                         if(end-begin>=3){
-                            while(begin!=end){ 
+                            while(begin!=end){
                                 if(this.mask[begin][j]!=1){
                                     this.mask[begin][j]=1;
                                     count++;
@@ -440,7 +432,7 @@ cc.Class({
                     end++;
                 }
                 if(end==this.Row&&end-begin>=3){
-                    while(begin!=end){ 
+                    while(begin!=end){
                         if(this.mask[begin][j]!=1){
                             this.mask[begin][j]=1;
                             count++;
@@ -449,14 +441,14 @@ cc.Class({
                     }
                 }
                 i=end;
-                
+
             }
         }
         return count;
     },
 
     deleteConnected:function(){//根据mask的状态信息删除相连的star
-        
+
         for(var i=0;i<this.Row;i++){
             var count=0;
             var start=0,end;
@@ -473,7 +465,7 @@ cc.Class({
                 if((this.mask[i][j-1]!=1||j-1<0)&&onoff==false){
                     end=j;
                     this.stars[i].splice(end,start-end+1);//删除star实例
-                    
+
                     onoff=true;
                 }
                 this.mask[i][j]=0;
@@ -485,7 +477,7 @@ cc.Class({
     dropAndUpdata:function(){//下落动画以及更新位置信息
         var finished=cc.callFunc(function(target){
             this.check();
-            
+
         },this);
 
         for(var i=0;i<this.stars.length;i++){
@@ -501,17 +493,22 @@ cc.Class({
 
             }
         }
-        
+
     },
     updateScore:function(){
         var score=this.Score.getComponent('Score');//更新分数显示
         score.setReward(this.reward);
         score.updateScore();
+    },
+    outputObj: function(obj) {
+        var description = "";
+        for (var i in obj) {
+            description += i + " = " + obj[i] + "\n";
+        }
+        console.log(description);
     }
 
-    
-
-    // called every frame, uncomment this function to activate update callback
+// called every frame, uncomment this function to activate update callback
     // update: function (dt) {
 
     // },
