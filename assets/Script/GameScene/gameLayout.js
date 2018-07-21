@@ -1,3 +1,4 @@
+import printhello from "./aitest.js"
 cc.Class({
     extends: cc.Component,
 
@@ -25,6 +26,10 @@ cc.Class({
             type:cc.Prefab
         },
         Score:{
+            default:null,
+            type:cc.Node
+        },
+        aitest:{
             default:null,
             type:cc.Node
         }
@@ -59,6 +64,9 @@ cc.Class({
                 com.pos = cc.v2(this.initPos[i].x*128 + offset.x, this.initPos[i].y*128 + offset.y)
                 node.addChild(ele,0,"ele")
         }
+        var md1 = require("../GameScene/aitest.js")
+        console.log(md1);
+        md1.printHello();
         this.addPieceTouchEvents()
     },
     check:function(){
@@ -176,6 +184,20 @@ cc.Class({
             } 
             node.setPosition(p1.x, p1.y)
         },this);  
+    },
+    aiMove: function () {
+        var selectNode = this.pieces[8]
+        var m = {direct: 'down', move: 1}
+        if(this.canMove(selectNode.getComponent('piece').getPnum(), m)) {
+            this.movePiecePos(selectNode, m)
+            this.movePieceOnBoard(selectNode.getComponent('piece').getPnum(), m)
+        }
+        sleep();
+        selectNode = this.pieces[9]
+        if(this.canMove(selectNode.getComponent('piece').getPnum(), m)) {
+            this.movePiecePos(selectNode, m)
+            this.movePieceOnBoard(selectNode.getComponent('piece').getPnum(), m)
+        }
     },
     calcPieceMove: function ( p1, x, y) {
         var move = 0
