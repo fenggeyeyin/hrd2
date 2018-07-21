@@ -40,7 +40,6 @@ cc.Class({
         this.pNum = 10;
         this.initBoard();
         this.buildInitPosTable();
-        this.buildCoordinateSet();//根据配置信息生成每个元素的坐标点集合
         this.init();
         
     },
@@ -144,24 +143,6 @@ cc.Class({
         this.initPos.push(cc.v2(1, 1))
         this.initPos.push(cc.v2(2, 1))
         this.initPos.push(cc.v2(3, 0))
-    },
-    buildCoordinateSet:function(){//根据配置信息生成每个元素的坐标点对象
-        var ele=cc.instantiate(this.star);
-        var eleSize=ele.getContentSize();
-        var beginX=(this.node.width-(this.Row-1)*(this.SpacingX+eleSize.width))/2;
-        var beginY=this.Padding+eleSize.height/2;
-        
-        this.pSet=[];        
-        for(var i=0;i<this.Row;i++){
-            var arr=[];
-            for(var j=0;j<this.Col;j++){
-                var position=cc.v2(beginX+i*(eleSize.width+this.SpacingX),beginY+j*(eleSize.height+this.SpacingY));
-                window.console.log(position.toString());
-                arr.push(position);
-            }
-            this.pSet.push(arr);
-        }
-        
     },
     findNodeByPos: function (x, y) {
         var pNum = this.board[parseInt(x/128)][parseInt(y/128)]
@@ -300,9 +281,6 @@ cc.Class({
             }
             
         },this);
-
-        
-        
     },
     PositionToGrid:function(x,y){//屏幕坐标转矩阵坐标
         var ele=cc.instantiate(this.star);
@@ -448,7 +426,6 @@ cc.Class({
     },
 
     deleteConnected:function(){//根据mask的状态信息删除相连的star
-
         for(var i=0;i<this.Row;i++){
             var count=0;
             var start=0,end;
