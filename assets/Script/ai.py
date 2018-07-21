@@ -122,38 +122,38 @@ def calcNextBoard_when0notNeighbor_onePiece(nowBoard, _0xy, direct):
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] - 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] - 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
     if _0xy["x"] < MAX_X - 1 and direct == 1:
         if nowBoard[_0xy["y"]][_0xy["x"] + 1] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] + 1] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
     if _0xy["y"] < MAX_Y - 1 and direct == 2:
         if nowBoard[_0xy["y"] + 1][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"], "up", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] + 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"], "up", 1)
     if _0xy["x"]  > 0 and direct == 3:
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] - 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
     return None
 
 def calcNextBoard_when0notNeighbor(nowBoard, direct):
@@ -170,20 +170,20 @@ def calcNextBoard_when0neighbor_typeI(nowBoard, _0xy, direct):
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] - 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] - 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
     if _0xy["x"] < MAX_X - 1 and direct == 1:
         if nowBoard[_0xy["y"]][_0xy["x"] + 1] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] + 1] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
     if _0xy["x"] < MAX_X - 1 and direct == 2:
         if nowBoard[_0xy["y"]][_0xy["x"] + 1]  == 2 and nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 2 and \
           (not (_0xy["y"] > 0 and _0xy["y"] < MAX_Y - 2 and nowBoard[_0xy["y"] + 2][_0xy["x"] + 1] == 2 and nowBoard[_0xy["y"] - 1][_0xy["x"] + 1] == 2)):
@@ -191,40 +191,40 @@ def calcNextBoard_when0neighbor_typeI(nowBoard, _0xy, direct):
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] + 1]  == 4 and nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 4:
             nextBoard[_0xy["y"]][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 4
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 4
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 1, "left", 1)
     if _0xy["x"] < MAX_X - 1 and direct == 3:
         if nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 1:
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "left", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 3:
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "left", 1)
     if _0xy["y"] < MAX_Y - 2 and direct == 4:
         if nowBoard[_0xy["y"] + 2][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] + 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 2, _0xy["x"], "up", 1)
         if nowBoard[_0xy["y"] + 2][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] + 3][_0xy["x"]] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 2, _0xy["x"], "up", 1)
     if _0xy["x"] > 0 and direct == 5:
         if nowBoard[_0xy["y"] + 1][_0xy["x"] - 1] == 1:
             nextBoard[_0xy["y"] + 1][_0xy["x"] - 1] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] - 1, "right", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"] - 1] == 3:
             nextBoard[_0xy["y"] + 1][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] - 1, "right", 1)
     if _0xy["x"] > 0 and direct == 6:
         if nowBoard[_0xy["y"]][_0xy["x"] - 1]  == 2 and nowBoard[_0xy["y"] + 1][_0xy["x"] - 1] == 2 and \
            (not (_0xy["y"] > 0 and _0xy["y"] < MAX_Y - 2 and nowBoard[_0xy["y"] + 2][_0xy["x"] - 1] == 2 and nowBoard[_0xy["y"] - 1][_0xy["x"] - 1] == 2)):
@@ -232,22 +232,22 @@ def calcNextBoard_when0neighbor_typeI(nowBoard, _0xy, direct):
             nextBoard[_0xy["y"] + 1][_0xy["x"] - 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] - 1]  == 4 and nowBoard[_0xy["y"] + 1][_0xy["x"] - 1] == 4:
             nextBoard[_0xy["y"]][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 4
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 4
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
     if _0xy["x"] > 0 and direct == 7:
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] - 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
     return None
 
 def calcNextBoard_when0neighbor_type_(nowBoard, _0xy, direct):
@@ -256,82 +256,82 @@ def calcNextBoard_when0neighbor_type_(nowBoard, _0xy, direct):
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] - 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
         if nowBoard[_0xy["y"] - 1][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] - 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
     if _0xy["y"] > 0 and direct == 1:
         if nowBoard[_0xy["y"] - 1][_0xy["x"]]  == 3 and nowBoard[_0xy["y"] - 1][_0xy["x"] + 1] == 3:
             nextBoard[_0xy["y"] - 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"] - 1][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
         if nowBoard[_0xy["y"] - 1][_0xy["x"]]  == 4 and nowBoard[_0xy["y"] - 1][_0xy["x"] + 1] == 4:
             nextBoard[_0xy["y"] - 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"] - 2][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 4
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 4
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"], "down", 1)
     if _0xy["y"] > 0 and direct == 2:
         if nowBoard[_0xy["y"] - 1][_0xy["x"] + 1] == 1:
             nextBoard[_0xy["y"] - 1][_0xy["x"] + 1] = 0
-            nextBoard[_0xy["y"]][_0xy["x"] + 1] = 1
-            return nextBoard
+            nextBoard[_0xy["y"]][_0xy["x"] + 1] = 1      
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"] + 1, "down", 1)
         if nowBoard[_0xy["y"] - 1][_0xy["x"] + 1] == 2:
             nextBoard[_0xy["y"] - 2][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] - 1, _0xy["x"] + 1, "down", 1)
     if _0xy["x"] < MAX_X - 2 and direct == 3:
         if nowBoard[_0xy["y"]][_0xy["x"] + 2] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] + 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 2, "left", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] + 2] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] + 3] = 0
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] + 2, "left", 1)
     if _0xy["y"] < MAX_Y - 1 and direct == 4:
         if nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 1:
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "up", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 2:
             nextBoard[_0xy["y"] + 2][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "up", 1)
     if _0xy["y"] < MAX_Y - 1 and direct == 5:
         if nowBoard[_0xy["y"] + 1][_0xy["x"]]  == 3 and nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 3:
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"] + 1][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "up", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"]]  == 4 and nowBoard[_0xy["y"] + 1][_0xy["x"] + 1] == 4:
             nextBoard[_0xy["y"] + 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"] + 2][_0xy["x"] + 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 4
             nextBoard[_0xy["y"]][_0xy["x"] + 1] = 4
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"] + 1, "up", 1)
     if _0xy["y"] < MAX_Y - 1 and direct == 6:
         if nowBoard[_0xy["y"] + 1][_0xy["x"]] == 1:
             nextBoard[_0xy["y"] + 1][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"], "up", 1)
         if nowBoard[_0xy["y"] + 1][_0xy["x"]] == 2:
             nextBoard[_0xy["y"] + 2][_0xy["x"]] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 2
-            return nextBoard
+            return nextBoard, (_0xy["y"] + 1, _0xy["x"], "up", 1)
     if _0xy["x"]  > 0 and direct == 7:
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 1:
             nextBoard[_0xy["y"]][_0xy["x"] - 1] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 1
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
         if nowBoard[_0xy["y"]][_0xy["x"] - 1] == 3:
             nextBoard[_0xy["y"]][_0xy["x"] - 2] = 0
             nextBoard[_0xy["y"]][_0xy["x"]] = 3
-            return nextBoard
+            return nextBoard, (_0xy["y"], _0xy["x"] - 1, "right", 1)
     return None
 
 def calcNextBoard_when0neighbor(nowBoard, direct):
@@ -380,8 +380,9 @@ def findBoardInTree(board, r):
         findBoardInTree(board, child)
 
 class BinaryTree:
-    def __init__(self,rootObj):
+    def __init__(self,rootObj,moveInfo):
         self.board = rootObj
+        self.moveInfo = moveInfo
         self.parent = None
         self.children = [None] * MAX_CAN_MOVE_DIRECT
         self.direct = 0
@@ -394,9 +395,9 @@ class BinaryTree:
     def calcLeafs(self):
         leafsCnt = 0
         for d in range(MAX_CAN_MOVE_DIRECT):
-            nextBoard = self.calcNextBoard(self.board, d)
+            nextBoard, moveInfo = self.calcNextBoard(self.board, d)
             if nextBoard != None and not isInHash(nextBoard, allBoardHash):
-                self.children[d] = BinaryTree(nextBoard)
+                self.children[d] = BinaryTree(nextBoard, moveInfo)
                 self.children[d].parent = self
                 addToHash(nextBoard, allBoardHash)
                 leafsCnt += 1
@@ -422,13 +423,16 @@ def winBoard(node):
         return True
     return False
 
-def makeWinPath(node):
+def makeWinPathAndMove(node):
     global winPath
+    global winMove
     temp = node
     while temp != None :
         winPath.insert(0, temp.board)
+        winMove.insert(0, temp.MoveInfo)
         temp = temp.parent
     winPath = winPath + OnePath[OnePath.index(node.board) + 1:]
+    winMove = winMove + OneMove[OnePath.index(node.board) + 1:]
 
 def getHashKey(board):
     return tuple(board[2] + board[3])
@@ -448,10 +452,12 @@ def isInHash(board, hash):
         return False
 
 winPath = []
+winMove = []
 OnePath = []
+OneMove = []
 #board = [[2,4,4,2],[2,4,4,2],[2,3,3,2],[2,1,1,2],[1,0,0,1]]
 board = [[4,4,2,2],[4,4,2,2],[3,3,0,2],[2,1,0,2],[2,1,1,1]]
-root = BinaryTree(board)
+root = BinaryTree(board, None)
 allBoardHash = {}
 winBoardHash = {}
 def main():
@@ -476,7 +482,7 @@ def main():
             node, d = node.getNextNode(d)
         node.direct = d
         if winBoard(node):
-            makeWinPath(node)
+            makeWinPathAndMove(node)
             break
 
 if __name__ == '__main__':
