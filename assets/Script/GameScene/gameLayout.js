@@ -1,4 +1,4 @@
-import printhello from "./aitest.js"
+
 cc.Class({
     extends: cc.Component,
 
@@ -64,9 +64,7 @@ cc.Class({
                 com.pos = cc.v2(this.initPos[i].x*128 + offset.x, this.initPos[i].y*128 + offset.y)
                 node.addChild(ele,0,"ele")
         }
-        var md1 = require("../GameScene/aitest.js")
-        console.log(md1);
-        md1.printHello();
+
         this.addPieceTouchEvents()
     },
     check:function(){
@@ -76,6 +74,9 @@ cc.Class({
     },
     initBoard: function () {
         this.board = [[7, 5, 5, 2, 2], [0, 8 ,6, 1, 1], [0, 9 ,6, 1, 1], [10, 4 ,4, 3, 3]]
+    },
+    getBoard: function () {
+        return this.board;
     },
     canMove: function (p_num, m) {
         console.info('can move ' + p_num + ' ' + m.direct + ' ' +  m.move)
@@ -185,15 +186,9 @@ cc.Class({
             node.setPosition(p1.x, p1.y)
         },this);  
     },
-    aiMove: function () {
-        var selectNode = this.pieces[8]
-        var m = {direct: 'down', move: 1}
-        if(this.canMove(selectNode.getComponent('piece').getPnum(), m)) {
-            this.movePiecePos(selectNode, m)
-            this.movePieceOnBoard(selectNode.getComponent('piece').getPnum(), m)
-        }
-        sleep();
-        selectNode = this.pieces[9]
+    aiMove: function (pnum, direct, move) {
+        var selectNode = this.pieces[pnum];
+        var m = {direct: direct, move: move};
         if(this.canMove(selectNode.getComponent('piece').getPnum(), m)) {
             this.movePiecePos(selectNode, m)
             this.movePieceOnBoard(selectNode.getComponent('piece').getPnum(), m)

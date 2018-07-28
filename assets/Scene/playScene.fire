@@ -400,12 +400,12 @@
     "target": {
       "__id__": 4
     },
-    "component": "aiModule",
+    "component": "aiButton",
     "handler": "getAiMove",
     "customEventData": ""
   },
   {
-    "__type__": "9f632ITdhFCiY6UXSAgAzTM",
+    "__type__": "3a260YEAedKfrUdZzwJQXAU",
     "_name": "",
     "_objFlags": 0,
     "node": {
