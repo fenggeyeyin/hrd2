@@ -14,7 +14,10 @@ cc.Class({
         // ...
         gameLayout:require("gameLayout")
     },
-
+    aiMoveArray: null,
+    aiStepsCnt: 0,
+    aiStepsNum: 0,
+    uiBoard: null,
     // use this for initialization
     onLoad: function () {
 
@@ -29,14 +32,24 @@ cc.Class({
         }
         return aiBoard;
     },
+    getPnum: function (uiBoard, x, y) {
+        return uiBoard[x][y]
+    },
+    makeAiMove1Step: function () {
+        var pnum = this.getPnum(this.uiBoard, this.aiMoveArray[this.aiStepsNum].piece[0], 4 - this.aiMoveArray[this.aiStepsNum].piece[1]);
+        this.gameLayout.aiMove(pnum, this.aiMoveArray[this.aiStepsNum].direct, this.aiMoveArray[this.aiStepsNum].step);
+        this.aiStepsNum += 1;
+    },
     getAiMove: function () {
-        var uiBoard = this.gameLayout.getBoard();
-        var aiBoard = this.convertFromUitoAi(uiBoard);
-        var aiMd = require("../GameScene/aitest.js")
+        this.uiBoard = this.gameLayout.getBoard();
+        var aiBoard = this.convertFromUitoAi(this.uiBoard);
+        var aiMd = require("../ai.js");
         console.log(aiMd);
-        var aiMoveArray = aiMd.getAiMoveArray(aiBoard, 3);
-        var pnum = uiBoard[aiMoveArray[0].piece[0]][4 - aiMoveArray[0].piece[1]];
-        this.gameLayout.aiMove(pnum, aiMoveArray[0].direct, aiMoveArray[0].step);
+        this.aiStepsCnt = 3;
+        this.aiStepsNum = 0;
+        this.aiMoveArray = aiMd.getAiMoveArray(aiBoard);
+        this.aiStepsCnt = this.aiMoveArray.length;
+        this.schedule(this.makeAiMove1Step, 0.2, this.aiStepsCnt)
     }
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {

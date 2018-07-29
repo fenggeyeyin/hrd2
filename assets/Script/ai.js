@@ -1,4 +1,4 @@
-(function () {
+function Ai () {
     "use strict";
 
     function ՐՏ_extends(child, parent) {
@@ -83,7 +83,7 @@
         return false
     }
 
-    (function () {
+    return function getAiMoveArray (board) {
         var __name__ = "__main__"
         var ՐՏ_1, ՐՏ_4;
         ;var MAX_CAN_MOVE_DIRECT, MAX_X, MAX_Y, winPath, winMove, OnePath, OneMove, board, root, allBoardHash, winBoardHash;
@@ -94,7 +94,7 @@
         winMove = [];
         OnePath = [];
         OneMove = [];
-        board = [[1, 2, 2, 2], [2, 2, 2, 2], [2, 1, 3, 3], [4, 4, 1, 0], [4, 4, 0, 1]];
+        //board = [[1, 2, 2, 2], [2, 2, 2, 2], [2, 1, 3, 3], [4, 4, 1, 0], [4, 4, 0, 1]];
         //board = [[2, 4, 4, 2], [2, 4, 4, 2], [2, 3, 3, 2], [2, 1, 1, 2], [1, 0, 0, 1]];
 
         allBoardHash = {};
@@ -617,7 +617,8 @@
             console.log();
             var index = boardIndexOf(node.board, OnePath)
             if (index >= 0) {
-                winPath = winPath.concat(OnePath.slice(boardIndexOf(node.board, OnePath) + 1));
+                winPath = winPath.concat(OnePath.slice(index + 1));
+                winMove = winMove.concat(OneMove.slice(index));
             }
         }
 
@@ -740,10 +741,15 @@
         }
 
         if (__name__ === "__main__") {
-            ՐՏ_print("no test run main!");
+            ՐՏ_print("run main!");
             main();
             ՐՏ_print(len(winPath));
-            ՐՏ_print(len(OnePath));
+            ՐՏ_print(len(winMove));
+            return winMove
         }
-    })();
-})();
+    }
+}
+
+var getAiMoveArray = Ai ();
+
+module.exports.getAiMoveArray = getAiMoveArray;
