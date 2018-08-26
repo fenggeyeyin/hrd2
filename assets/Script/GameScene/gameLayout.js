@@ -29,9 +29,9 @@ cc.Class({
             default:null,
             type:cc.Node
         },
-        aitest:{
+        JumpTo:{
             default:null,
-            type:cc.Node
+            type:cc.EditBox
         }
     },
     reward:0,
@@ -79,7 +79,6 @@ cc.Class({
         return this.board;
     },
     canMove: function (p_num, m) {
-        console.info('can move ' + p_num + ' ' + m.direct + ' ' +  m.move)
         var p_grids = []
         for (var i=0; i< 4; i++) {
             for (var j=0; j< 5; j++) {
@@ -104,7 +103,6 @@ cc.Class({
                     tmp.y--
                 }
                 if (this.board[tmp.x][tmp.y] != 0 && this.board[tmp.x][tmp.y] != p_num) {
-                    console.info('piece ' + p_num + 'can not move 1' + m.direct + ' ' + this.board[tmp.x][tmp.y])
                     return false;
                 }
                 return true;
@@ -129,7 +127,6 @@ cc.Class({
                     tmp.y--
                 }
                 if (this.board[tmp.x][tmp.y] != 0 && this.board[tmp.x][tmp.y] != p_num) {
-                    console.info('piece ' + p_num + 'can not move 2' + m.direct + ' ' +this.board[tmp.x][tmp.y])
                     return false;
                 }
                 return true;
@@ -137,7 +134,6 @@ cc.Class({
             if (!rt)
                 return false
         }
-        console.info('piece ' + p_num + 'can move ' + m.direct + ' ' + m.move)
         return true
     },
     buildInitPosTable:function () {
@@ -225,7 +221,7 @@ cc.Class({
         }
         return {direct: direct, move: move}
     },
-    movePiecePos: function (node, m) {
+    movePiecePos: function (node, m, withAction=true) {
         var p1 = node.getComponent('piece').pos
         var x = p1.x, y=p1.y
         if (m.direct == 'right')
@@ -237,9 +233,11 @@ cc.Class({
         if (m.direct == 'down')
             y = p1.y - m.move*128
 
-        var act=cc.moveTo(m.move*0.1,cc.v2(x, y));
+        if(withAction) {
+            var act=cc.moveTo(m.move*0.1,cc.v2(x, y));
+            node.runAction(act);
+        }
 
-        node.runAction(act);
         //node.setPosition(x,y);
         node.getComponent('piece').pos = cc.v2(x, y)
     },
@@ -264,7 +262,6 @@ cc.Class({
                 item.y = item.y - m.move
             this.board[item.x][item.y] = p_num
         })
-        console.info('board after move ' + this.board)
     },
     addTouchEvents:function(node){//添加触摸监听事件
         var p1=null;
@@ -489,7 +486,10 @@ cc.Class({
         }
 
     },
-    updateScore:function(){
+    getJumpSteps: function(){
+        return this.JumpTo.string;
+    },
+    updateScore: function(){
         var score=this.Score.getComponent('Score');//更新分数显示
         score.setReward(this.reward);
         score.updateScore();
